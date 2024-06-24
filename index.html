@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        .container {
+            display: flex;
+            width: 60%;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .left-panel {
+            background-color: #ffdb5a;
+            padding: 2rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .left-panel img {
+            width: 100%;
+            max-width: 300px;
+        }
+        .left-panel p {
+            font-size: 1.5rem;
+            text-align: center;
+            margin: 1rem 0;
+        }
+        .right-panel {
+            padding: 2rem;
+            flex: 1;
+            background-color: #fff;
+        }
+        .right-panel form {
+            display: flex;
+            flex-direction: column;
+        }
+        .right-panel form input {
+            margin: 0.5rem 0;
+            padding: 0.5rem;
+            font-size: 1rem;
+            border-radius: 25px;
+            border: 1px solid #ccc;
+        }
+        .right-panel form button {
+            padding: 0.7rem;
+            font-size: 1rem;
+            color: #fff;
+            background-color: #f66085;
+            border: none;
+            cursor: pointer;
+            margin-top: 1rem;
+            border-radius: 25px;
+        }
+        .right-panel .social-login {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .right-panel .social-login select {
+            padding: 0.5rem;
+            font-size: 1rem;
+            border-radius: 25px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+        .error {
+            color: red;
+            font-size: 0.9rem;
+            margin-top: -0.5rem;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <img src="for task.jpeg" alt="pic not supported">
+            <p>Engineer is building the world.</p>
+        </div>
+        <div class="right-panel">
+            <form id="signup-form">
+                <div class="social-login">
+                    <select id="social-login-dropdown">
+                        <option value="" disabled selected>Sign up with...</option>
+                        <option value="google">Google</option>
+                        <option value="apple">Apple</option>
+                    </select>
+                </div>
+                <p>or</p>
+                <input type="text" id="name" placeholder="Name" required>
+                <div id="name-error" class="error"></div>
+                <input type="text" id="username" placeholder="Username" required>
+                <div id="username-error" class="error"></div>
+                <input type="email" id="email" placeholder="Email" required>
+                <div id="email-error" class="error"></div>
+                <input type="password" id="password" placeholder="Password" required>
+                <div id="password-error" class="error"></div>
+                <button type="submit">Create Account</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const nameInput = document.getElementById('name');
+        const usernameInput = document.getElementById('username');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+
+        nameInput.addEventListener('blur', function() {
+            validateName();
+        });
+
+        usernameInput.addEventListener('blur', function() {
+            validateUsername();
+        });
+
+        emailInput.addEventListener('blur', function() {
+            validateEmail();
+        });
+
+        passwordInput.addEventListener('blur', function() {
+            validatePassword();
+        });
+
+        function validateName() {
+            const nameError = document.getElementById('name-error');
+            const name = nameInput.value.trim();
+            if (name === '') {
+                nameError.textContent = 'Name is required.';
+                return false;
+            } else if (name.length <= 9) {
+                nameError.textContent = 'Name must be more than 9 letters.';
+                return false;
+            } else {
+                nameError.textContent = '';
+                return true;
+            }
+        }
+
+        function validateUsername() {
+            const usernameError = document.getElementById('username-error');
+            const username = usernameInput.value.trim();
+            const numberPattern = /\d/g;
+            if (username === '') {
+                usernameError.textContent = 'Username is required.';
+                return false;
+            } else if ((username.match(numberPattern) || []).length < 2) {
+                usernameError.textContent = 'Username must contain at least 2 numbers.';
+                return false;
+            } else {
+                usernameError.textContent = '';
+                return true;
+            }
+        }
+
+        function validateEmail() {
+            const emailError = document.getElementById('email-error');
+            const email = emailInput.value.trim();
+            const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            if (email === '') {
+                emailError.textContent = 'Email is required.';
+                return false;
+            } else if (!emailPattern.test(email)) {
+                emailError.textContent = 'Invalid email format.';
+                return false;
+            } else {
+                emailError.textContent = '';
+                return true;
+            }
+        }
+
+        function validatePassword() {
+            const passwordError = document.getElementById('password-error');
+            const password = passwordInput.value.trim();
+            if (password === '') {
+                passwordError.textContent = 'Password is required.';
+                return false;
+            } else if (password.length < 6) {
+                passwordError.textContent = 'Password must be at least 6 characters long.';
+                return false;
+            } else {
+                passwordError.textContent = '';
+                return true;
+            }
+        }
+
+        document.getElementById('signup-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const isNameValid = validateName();
+            const isUsernameValid = validateUsername();
+            const isEmailValid = validateEmail();
+            const isPasswordValid = validatePassword();
+
+            if (isNameValid && isUsernameValid && isEmailValid && isPasswordValid) {
+                console.log('Form Submitted', {
+                    name: nameInput.value.trim(),
+                    username: usernameInput.value.trim(),
+                    email: emailInput.value.trim(),
+                    password: passwordInput.value.trim()
+                });
+                alert('Account created successfully!');
+            }
+        });
+
+        document.getElementById('social-login-dropdown').addEventListener('change', function(event) {
+            const selectedOption = event.target.value;
+            if (selectedOption === 'google') {
+                alert('Redirecting to Google sign up...');
+            } else if (selectedOption === 'apple') {
+                alert('Redirecting to Apple sign up...');
+            }
+        });
+    </script>
+</body>
+</html>
